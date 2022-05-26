@@ -323,7 +323,6 @@ class MarcoDatos{
   int n = scan.nextInt();
   double sum=0;
   double cont=0;
-  bubbleSort(arr3, NumeroLineas-1, n);
   for(int i= 0; i<NumeroLineas-1; i++){
     if(arr3[i][n]==111.1){
       continue;
