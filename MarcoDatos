@@ -333,15 +333,15 @@ class MarcoDatos{
     cont++;}
   }
   double media = sum/cont;
-  int sum1 = 0; 
+  double sum1 = 0; 
   for(int i=0; i<NumeroLineas-1; i++){
     if(arr3[i][n]==111.1){
       continue;
     }
     sum1 += Math.pow (arr3[i][n]-media, 2 );
   }
+  sum1 = sum1/cont;
   double desv = Math.sqrt(sum1);
-  desv = desv/cont;
   return desv;
 }
 
