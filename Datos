@@ -1,0 +1,193 @@
+import java.util.Scanner;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+/**
+ * Clase Datos
+ *
+ * Contiene cada tipo de dato ordenado por categoria.
+ *
+ * @author Jaun Felipe Vargas, Tomas Jaramillo, Mato Zapata
+ * @version 1.8
+ */
+class Datos{
+  /**
+  * Nombre de la estacion
+  */
+  private String Station;
+  /**
+  * Nombre del aeropuerto
+  */
+  private String Name;
+  /**
+  * Fecha del vuelo
+  */
+  private String Date;
+  /**
+  * Precipitacion
+  */
+  private double PRCP;
+  /**
+  * Temperatura Promedio
+  */
+  private double TAVG;
+  /**
+  * Temperatura Maxima
+  */
+  private double TMAX;
+  /**
+  * Temperatura Minima
+  */
+  private double TMIN;
+  
+
+/**
+* Constructor con 4 parametros
+* @param Station nombre de la estacion
+* @param Name nombre del aeropuerto
+* @param Date fecha del vuelo
+* @param PRCP precipitacion
+* @param TAVG temperatura promedio
+* @param TMAX temperatura maxima
+* @param TMIN temperatura minima
+*/
+  public Datos(String[]arr){
+    this.setStation(arr[0]);
+    this.setName(arr[1]);
+    this.setDate(arr[3]);   
+    this.PRCP = tryParse(arr, 111.1, 4);
+    this.TAVG = tryParse(arr,111.1,5);
+    this.TMAX = tryParse(arr, 111.1, 6);
+    this.TMIN= tryParse(arr, 111.1,7);
+    }
+/**
+* el setter de la estacion
+* @param s
+*/
+  public void setStation(String s){
+    this.Station = s;
+  }
+/**
+* el getter de la estacion
+* @return String Station
+*/
+  public String getStation(){
+    return this.Station;
+  }
+/**
+* el setter del nombre del aeropuerto
+* @param n
+*/
+  public void setName(String n) {
+    this.Name = n;
+  }
+/**
+* el getter del nombre del aeropuerto
+* @return String nombre del aeropuerto
+*/
+  public String getName() {
+    return this.Name;
+  }
+/**
+* el setter de la fecha
+* @param n
+*/
+public void setDate(String n) {
+    this.Date = n;
+  }
+/**
+* el getter de la fecha
+* @return String de la fecha
+*/
+  public String getDate() {
+    return this.Date;
+  }
+/**
+* el setter de la precipitacion
+* @param a
+*/
+  public void setPRCP(String a){
+    if (a!=""){
+      this.PRCP = Double.parseDouble(a.toString());
+      } else {
+      this.PRCP = 111.1;
+      }
+  }
+/**
+* el getter de la precipitacion
+* @return double precipitacion
+*/
+  public double getPRCP(){
+    return this.PRCP;
+  }
+/**
+* el setter de la temperatura promedio
+* @param a
+*/
+  public void setTAVG(String a){
+    if (a!=""){
+      this.TAVG = Double.parseDouble(a.toString());
+    } 
+    else {
+      this.TAVG = 111.1;
+    }
+    
+  }
+/**
+* el getter de la temperatura promedio
+* @return double temperatura promedio
+*/
+  public double getTAVG(){
+    return this.TAVG;
+  }
+/**
+* el setter de la temperatura maxima
+* @param a
+*/
+  public void setTMAX(String a){
+    if (a!=""){
+      this.TMAX = Double.parseDouble(a.toString());
+    } 
+    else {
+      this.TMAX = 111.1;
+    }
+    
+  }
+/**
+* el getter de la temperatura maxima
+* @return double temperatura maxima
+*/
+  public double getTMAX(){
+    return this.TMAX;
+  }
+/**
+* el setter de la temperatura minima
+* @param a
+*/
+  public void setTMIN(String a){
+    if (a!=""){
+      this.TMIN = Double.parseDouble(a.toString());
+      } else {
+      this.TMIN = 111.1;
+      }
+  }
+/**
+* el getter de la temperatura minima
+* @return double temperatura minima
+*/
+  public double getTMIN(){
+    return this.TMIN;
+  }
+/**
+* Pasa String a double par
+* @param 
+* @return 
+*/
+  public static double tryParse(String[] arr, double defaultVal, int n) {
+    try {
+        return Double.parseDouble(arr[n]);
+    } catch (NumberFormatException e) {
+        return defaultVal;
+    }
+  }
+}
