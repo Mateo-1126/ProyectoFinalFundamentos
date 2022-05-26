@@ -1,0 +1,13 @@
+/**
+ * Clase ProyectoFinal
+ *
+ * Esta clase corre todo el programa
+ * 
+ * @author Juan Felipe Vargas, Tomas Jaramillo, Mateo Zapata
+ * @version 1.8
+ */
+class Main {
+  public static void main(String[] args) {
+    MostrarMenu.menu();
+  }
+}
