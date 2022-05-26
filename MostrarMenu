@@ -1,0 +1,69 @@
+Import java.util.Scanner;
+/**
+ * Clase MostrarMenu
+ *
+ * Esta clase es la interfaz del usuario, la cual invoca los metodos creados a peticion del usuario.
+ * 
+ * @author Juan Felipe Vargas, Tomas Jaramillo, Mateo Zapata
+ * @version 1.8
+ */
+public class MostrarMenu{
+    /**
+     * La base para la interfaz del usuario; invoca todo los metodos creados.
+     */
+    public static void menu(){
+    Scanner scan = new Scanner(System.in);
+    MarcoDatos a=new MarcoDatos();
+    System.out.print("Los archivos que estan disonibles son: Medellin.csv, Bogota.csv y SanFrancisco.csv. Ingrese el nombre del archivo que desea trabajar: ");
+    String nombreArchivo=scan.next();
+    a.NumeroLineas(nombreArchivo);
+    a.Asignar(nombreArchivo);
+    //a.escribirTXT(a.Asignar(nombreArchivo));
+    System.out.println("El programa tiene varias funcionalidades las cuales se resentan a continuacion. Ingresa el numero corresondiente a la funcion que se desea implementar. El 0 para repetir el menu. 1 para conocer el numero de lineas que contiene el archivo. 2 para conocer la media de alguna variable. 3 para conocer la mediana de alguna variable. 4 para conocer la moda de alguna variable. 5 para buscar los datos que tienen un valor menor al ingresado en la variable que se desee. 6 para buscar los datos que tienen un valor mayor al ingresado en la variable que se desee. 7 para buscar los datos que tienen un valor igual al ingresado en la variable que se desee. 8 para conocer la desviacion de alguna variable. 9 para transcribir a un documento de tipo TXT, todo lo escrito en el archivo escogido. 10 para leer todo el contenido del archivo escogido en al consola. -1 para terminar el programa.");
+    System.out.print("Ingrese un numero: ");
+    int n=scan.nextInt();
+while(n>=0){
+    switch(n){
+      case 0:
+        System.out.println("El programa tiene varias funcionalidades las cuales se resentan a continuacion. Ingresa el numero corresondiente a la funcion que se desea implementar. El 0 para repetir el menu. 1 para conocer el numero de lineas que contiene el archivo. 2 para conocer la media de alguna variable. 3 para conocer la mediana de alguna variable. 4 para conocer la moda de alguna variable. 5 para buscar los datos que tienen un valor menor al ingresado en la variable que se desee. 6 para buscar los datos que tienen un valor mayor al ingresado en la variable que se desee. 7 para buscar los datos que tienen un valor igual al ingresado en la variable que se desee. 8 para conocer la desviacion de alguna variable. 9 para transcribir a un documento de tipo TXT, todo lo escrito en el archivo escogido. 10 para leer todo el contenido del archivo escogido en al consola. -1 para terminar el programa.");
+       break;
+      case 1:
+    System.out.println("El numero de lineas es: " + a.getNumeroLineas()); 
+        break;
+      case 2:
+       System.out.println("La media es: " + a.media()); 
+        break;
+      case 3:
+       System.out.println("La mediana es: "+a.mediana()); 
+        break;
+      case 4: 
+       System.out.println("La moda es: " + a.moda()); 
+        break;
+      case 5:
+       a.MenorQue(); 
+        break;
+      case 6: 
+       a.MayorQue(); 
+        break;
+      case 7:
+       a.IgualQue(); 
+        break;
+      case 8:
+       System.out.println("La desviacion es: " + a.desviacion()); 
+        break; 
+      case 9:
+        System.out.println("Ingrese el nombre del archivo en el cual quiere escribir: ");
+        String archivo = scan.next();
+        a.EscribirCSV(archivo);
+        break;
+      case 10:
+        System.out.println("Escriba el archivo que desea leer: ");
+        String archivo1 = scan.next();
+        a.LeerCSV(archivo1);
+        break;
+    }
+    System.out.print("Ingrese un numero: ");
+    n=scan.nextInt();
+    } 
+  }
+}
