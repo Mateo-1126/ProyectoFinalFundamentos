@@ -1,0 +1,400 @@
+import java.util.Scanner;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+/**
+ * Clase MarcoDatos
+ *
+ * Esta clase contiene la creacion del array que contendra todos los datos, la matriz que contiene toda  todas las operaciones, sean de filtro o de estadistica.
+ *
+ * @author Juan Felipe Vargas, Tomas Jaramillo, Mateo Zapata
+ * @version 1.8
+ */
+
+class MarcoDatos{
+  private ArrayList<Datos> arr;
+  private double[][] arr3;
+  private int NumeroLineas=0;
+  Scanner scan = new Scanner(System.in);
+/**
+* Calcula la cantidad de lineas que hay en el csv escogido
+* @param String a (el csv en forma de string)
+* @return El numero de lineas en el csv
+*/
+  public void NumeroLineas(String a){
+    String strCurrentLine;
+    BufferedReader br=null;
+    try{
+      br=new BufferedReader( new FileReader(a));
+      while ((strCurrentLine = br.readLine()) != null){  
+        NumeroLineas++;
+      } 
+    }
+    catch (Exception e){
+      e.printStackTrace();
+    }
+    try{   
+      if (br.readLine() != null){
+        br.close();  
+      }   
+    } 
+    catch (IOException ex){   
+      ex.printStackTrace();  
+    }
+  }
+  public int getNumeroLineas(){
+    return NumeroLineas;
+  }
+/**
+* Convierte el csv en forma de string a un ArrayList
+* @param String a (el csv en forma de string)
+* @return el csv como arreglo
+*/
+  public ArrayList<Datos> Asignar(String a){
+    ArrayList<Datos> arr = new ArrayList <Datos>();
+    int control=0;
+    String strCurrentLine;
+    BufferedReader br=null;
+    try{
+      br=new BufferedReader( new FileReader(a));
+      double[][] arr1=new double[NumeroLineas-1][4];
+      arr3=arr1;
+      br.readLine();
+      while ((strCurrentLine = br.readLine()) != null) {
+        strCurrentLine = strCurrentLine.replace("\"","");
+        String[] ar=strCurrentLine.split(",");
+      if(ar.length<8){
+          strCurrentLine = strCurrentLine+",111.1";
+        }
+        ar=strCurrentLine.split(",");
+        Datos d=new Datos(ar);
+        arr.add(d);
+        arr3[control][0]=d.getPRCP();     
+        arr3[control][1]=d.getTAVG();    
+        arr3[control][2]=d.getTMAX();
+        arr3[control][3]=d.getTMIN();
+        control++;
+      }   
+    }
+    catch (Exception e){
+      e.printStackTrace();
+    }
+    try{   
+      if (br.readLine() != null){
+        br.close();
+      }   
+    }
+    catch (IOException ex){   
+      ex.printStackTrace();  
+    }
+    this.arr=arr;
+    return arr;
+  }
+/**
+* Coje un arreglo bidimencional y ordena de mayor a menor una de sus columnas
+* @param double[][] sort_arr (el arreglo a ordenar)
+* @param int len (longitud de la columna)
+* @param int var (columna escogida)
+* @return un arreglo ordenado de menor a mayor
+*/
+  public static void bubbleSort(double[][] sort_arr, int len, int var){
+    for (int i=0;i<len-1;++i){
+      for(int j=0;j<len-i-1; ++j){
+        if(sort_arr[j+1][var]<sort_arr[j][var]){
+          double swap = sort_arr[j][var];
+          sort_arr[j][var] = sort_arr[j+1][var];
+          sort_arr[j+1][var] = swap;
+        }
+      }
+    }
+  }
+
+/**
+* Calcula la media de un dato escogido
+* @return Double la media del dato escogido
+*/
+  public double media(){
+    System.out.println("Para ver la media de la precipitacion, tempetratura promedio, temperatura maxima o temperatura minima, ingrese respesctivamente los numeros 0, 1, 2 o 3: ");
+    int n = scan.nextInt();
+    double sum=0;
+    double cont=0;
+    for(int i= 0; i<NumeroLineas-1; i++){
+      if(arr3[i][n]==111.1){
+        continue;
+      }
+      sum+=arr3[i][n];
+      cont++;
+    }
+    double media = sum/cont;
+    return media;
+    }
+
+  
+/**
+* Calcula la mediana de un dato escogido
+* @return Double la mediana del dato escogido
+*/   
+  public double mediana(){
+    System.out.println("Para ver la mediana de la precipitacion, tempetratura promedio, temperatura maxima o temperatura minima, ingrese respesctivamente los numeros 0, 1, 2 o 3: ");
+    int n = scan.nextInt();
+    double median = 0;
+    int cont = 0;
+    
+    bubbleSort(arr3, NumeroLineas-1, n);
+    for(int i=0; i<NumeroLineas-1; i++){
+   if(arr3[i][n] != 111.1){
+      cont++;
+    }
+      }
+    if(cont%2==0){
+      median = (arr3[(cont/2)-1][n]+arr3[(cont/2)][n])/2;
+    }
+    else{
+      median = arr3[(cont+1)/2][n];
+    }
+    return median;
+  }
+
+
+  
+/**
+* Calcula la moda de un dato escogido
+* @return Double la moda del dato escogido
+*/    
+  public double moda(){
+    System.out.println("Para ver la moda de la precipitacion, tempetratura promedio, temperatura maxima o temperatura minima, ingrese respesctivamente los numeros 0, 1, 2 o 3: ");
+    int n = scan.nextInt();
+    bubbleSort(arr3, NumeroLineas-1, n);
+    int moda = -1;
+    double numModa = 0;
+    for(int i = 0; i<NumeroLineas-1; i++){
+      int temp = 0;
+      for(int j = i+1; j<NumeroLineas-1; j++){
+        if(arr3[i][n] == 111.1){
+          continue;
+        }
+        else if(arr3[i][n] == arr3[j][n]){
+          temp++;
+        }
+      }
+      if(temp > moda){
+        moda = temp;
+        numModa = arr3[i][n]; 
+      }
+    }
+    return numModa;
+  }
+/**
+* Se le pide al usuario que ingrese un numero, y el metodo creara un array nuevo que imprima todos los datos de la categoria escogida que sean menores al numero escogido
+* @return ArrayList con los datos menores al ingresado
+*/
+ public void MenorQue(){
+   System.out.println("Para ver los Datos de la precipitacion, tempetratura promedio, temperatura maxima o temperatura minima, ingrese respesctivamente los numeros 0, 1, 2 o 3: ");
+   int m=scan.nextInt();
+   System.out.println("Menor a que numero se quiere: ");
+   double n=scan.nextDouble();
+   ArrayList<Datos> arr4=new ArrayList<Datos>();
+   switch(m){
+     case 0:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getPRCP()<n){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 1:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTAVG()<n){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 2:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTMAX()<n){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 3:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTMIN()<n){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+     }  
+   tabla(arr4);
+   } 
+/**
+* Se le pide al usuario que ingrese un numero, y el metodo creara un array nuevo que imprima todos los datos de la categoria escogida que sean mayores al numero escogido
+* @return ArrayList con los datos mayores al ingresado
+*/
+ public void MayorQue(){
+   System.out.println("Para ver los Datos de la precipitacion, tempetratura promedio, temperatura maxima o temperatura minima, ingrese respesctivamente los numeros 0, 1, 2 o 3: ");
+   int m=scan.nextInt();
+   System.out.println("Mayor a que numero se quiere: ");
+   double n=scan.nextDouble();
+        ArrayList<Datos> arr4=new ArrayList<Datos>();
+   switch(m){
+     case 0:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getPRCP()>n && arr.get(i).getPRCP()!=111.1){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 1:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTAVG()>n && arr.get(i).getTAVG()!=111.1){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 2:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTMAX()>n && arr.get(i).getTMAX()!=111.1){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 3:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTMIN()>n && arr.get(i).getTMIN()!=111.1){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+     }  
+   tabla(arr4);
+   }   
+
+/**
+* Se le pide al usuario que ingrese un numero, y el metodo creara un array nuevo que imprima todos los datos de la categoria escogida que sean igual al numero escogido
+* @return ArrayList con los datos iguales al ingresado
+*/
+  public void IgualQue(){
+   System.out.println("Para ver los Datos de la precipitacion, tempetratura promedio, temperatura maxima o temperatura minima, ingrese respesctivamente los numeros 0, 1, 2 o 3: ");
+   int m=scan.nextInt();
+   System.out.println("Igual a que numero se quiere: ");
+   double n=scan.nextDouble();
+        ArrayList<Datos> arr4=new ArrayList<Datos>();
+   switch(m){
+     case 0:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getPRCP()==n){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 1:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTAVG()==n){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 2:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTMAX()==n){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+       case 3:
+   for(int i=0; i<NumeroLineas-1; i++){
+   if(arr.get(i).getTMIN()==n){
+     arr4.add(arr.get(i));
+    } 
+  }
+       break;
+     }  
+    tabla(arr4);
+   }
+
+/**
+* Calcula la desviacion estandar de un dato escogido
+* @return Double la desviacion estandar del dato escogido
+*/
+  public double desviacion(){
+  System.out.println("Para ver la desviacion de la precipitacion, tempetratura promedio, temperatura maxima o temperatura minima, ingrese respesctivamente los numeros 0, 1, 2 o 3: ");
+  int n = scan.nextInt();
+  double sum=0;
+  double cont=0;
+  bubbleSort(arr3, NumeroLineas-1, n);
+  for(int i= 0; i<NumeroLineas-1; i++){
+    if(arr3[i][n]==111.1){
+      continue;
+    }
+    else{
+    sum+=arr3[i][n];
+    cont++;}
+  }
+  double media = sum/cont;
+  int sum1 = 0; 
+  for(int i=0; i<NumeroLineas-1; i++){
+    if(arr3[i][n]==111.1){
+      continue;
+    }
+    sum1 += Math.pow (arr3[i][n]-media, 2 );
+  }
+  double desv = Math.sqrt(sum1);
+  desv = desv/cont;
+  return desv;
+}
+
+
+
+  
+/**
+* Convierte ciertos datos del array en un formato de tabla y los imprime
+*/
+  public void tabla(ArrayList<Datos> arrr){
+    System.out.println("-----------------------------------------------------------------------------");
+    System.out.printf("%10s %20s %5s %5s %5s", "STATION", "PRCP", "TAVG", "TMAX", "TMIN");
+    System.out.println();
+    System.out.println("-----------------------------------------------------------------------------");
+    for(int i= 0; i<arrr.size()-1; i++){
+      System.out.format("%10s %20f %5f %5f %5f", arrr.get(i).getStation(), arrr.get(i).getPRCP(), arrr.get(i).getTAVG(), arrr.get(i).getTMAX(), arrr.get(i).getTMIN());
+      System.out.println();
+    }
+    System.out.println("-----------------------------------------------------------------------------");
+  }
+/**
+* Permite ingresar nuevo texto a un artchivo existente o nuevo.
+* @param String a
+*/
+  public void EscribirCSV(String a){
+    try {
+      System.out.print("Escribe lo que deseas añadir al archivo: ");
+            String ingreso=scan.nextLine();
+            File file = new File(a);
+            file.createNewFile();
+            FileWriter fw = new FileWriter(a, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("\n"+ingreso);
+            bw.close(); 
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+/**
+* Imprime por consola el archivo elegido
+* @param String a
+*/
+    public void LeerCSV(String a){
+      String strCurrentLine;
+    BufferedReader br=null;
+    try {
+       br=new BufferedReader( new FileReader(a));
+      while ((strCurrentLine = br.readLine()) != null){ 
+        System.out.println(strCurrentLine);
+        } 
+      }catch (IOException ex) {
+            ex.printStackTrace();
+        }
+      }
+
+}
